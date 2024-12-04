@@ -1,11 +1,10 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } } // Explicitly defining context type
 ) {
   const { userId } = auth();
 
@@ -15,7 +14,7 @@ export async function PUT(
 
   try {
     const { completed } = await req.json();
-    const todoId = params.id;
+    const todoId = context.params.id;
 
     const todo = await prisma.todo.findUnique({
       where: { id: todoId },
@@ -45,7 +44,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } } // Explicitly defining context type
 ) {
   const { userId } = auth();
 
@@ -54,7 +53,7 @@ export async function DELETE(
   }
 
   try {
-    const todoId = params.id;
+    const todoId = context.params.id;
 
     const todo = await prisma.todo.findUnique({
       where: { id: todoId },
